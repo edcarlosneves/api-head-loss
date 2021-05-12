@@ -5,11 +5,3 @@ repos:
     - id: black
       language_version: python3.8
       stages: [commit]
--   repo: local
-    hooks:
-      - id: requirements
-        name: requirements
-        entry: bash -c '/mnt/myfiles/projects/envs/api-head-loss/bin/pip3 freeze > requirements.txt; git add requirements.txt'
-        language: system
-        pass_filenames: false
-        stages: [commit]
