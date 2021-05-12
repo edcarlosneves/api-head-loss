@@ -9,5 +9,5 @@ def authenticate(username, password):
 
 
 def identity(payload):
-    id_user = payload['identity']
+    id_user = payload["identity"]
     return UserModel.search_by_id(id_user)

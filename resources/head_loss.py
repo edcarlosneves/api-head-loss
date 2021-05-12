@@ -53,7 +53,6 @@ class HeadLoss(Resource):
         help="material_condition is not defined.",
     )
 
-
     parser.add_argument(
         "pipe_length", type=float, required=True, help="pipe_length is not defined."
     )
@@ -71,7 +70,7 @@ class HeadLoss(Resource):
         pipe_diameter = data["pipe_diameter"]
         volumetric_flow_rate = data["volumetric_flow_rate"]
         pipe_material = data["pipe_material"]
-        material_condition = data['material_condition']
+        material_condition = data["material_condition"]
         pipe_length = data["pipe_length"]
         user_id = data["user_id"]
 

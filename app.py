@@ -9,7 +9,6 @@ from resources.head_loss import HeadLoss, GetHeadLoss
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
 app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
-# app.config['SECRET_KEY'] = 'super-secret'
 app.secret_key = "perdacarga"
 api = Api(app)
 

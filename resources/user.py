@@ -38,4 +38,3 @@ class User(Resource):
         if user:
             return user_schema.dump(user)
         return {"message": gettext("user_not_found")}
-

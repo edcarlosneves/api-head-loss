@@ -1,32 +1,112 @@
-from math import pi, log10
+from flask import Flask
+from flask_restful import Api
+from flask_jwt import JWT
+
+from security import authenticate, identity
+from resources.user import User
+from resources.head_loss import HeadLoss, GetHeadLoss
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
+app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
+app.secret_key = "perdacarga"
+api = Api(app)
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+
+jwt = JWT(app, authenticate, identity)  # /auth
+
+api.add_resource(HeadLoss, "/headloss")
+api.add_resource(User, "/user/<string:username>")from math import pi, log10
 from models.constants import GRAVITY
 from models.user import UserModel
 from db import db
 import sqlite3
 
 average_roughness = {
-    "steel": {
-        "sheet_metal_new": {"ft": 1.6e-4, "m": 5.0e-2},
-        "stainless_new": {"ft": 7.0e-6, "m": 2.0e-3},
-        "commercial_new": {"ft": 1.50e-4, "m": 4.60e-2},
-        "riveted": {"ft": 1.0e-2, "m": 3.0},
-        "rusted": {"ft": 7.0e-3, "m": 2.0},
+    'steel': {
+        'sheet_metal_new': {
+            'ft': 1.6E-4,
+            'm': 5.0E-2
+        },
+        'stainless_new': {
+            'ft': 7.0E-6,
+            'm': 2.0E-3
+        },
+        'commercial_new': {
+            'ft': 1.50E-4,
+            'm': 4.60E-2
+        },
+        'riveted': {
+            'ft': 1.0E-2,
+            'm': 3.0
+        },
+        'rusted': {
+            'ft': 7.0E-3,
+            'm': 2.0
+        }
     },
-    "iron": {
-        "cast_new": {"ft": 8.50e-4, "m": 2.60e-1},
-        "wrought_new": {"ft": 1.50e-4, "m": 4.60e-2},
-        "galvanized_new": {"ft": 5.0e-4, "m": 1.50e-1},
-        "asphalted_cast": {"ft": 4.00e-4, "m": 1.20e-1},
+    'iron': {
+        'cast_new': {
+            'ft': 8.50E-4,
+            'm': 2.60E-1
+        },
+        'wrought_new': {
+            'ft': 1.50E-4,
+            'm': 4.60E-2
+        },
+        'galvanized_new': {
+            'ft': 5.0E-4,
+            'm': 1.50E-1
+        },
+        'asphalted_cast': {
+            'ft': 4.00E-4,
+            'm': 1.20E-1
+        }
+
     },
-    "brass": {"drawn_new": {"ft": 7.0e-6, "m": 2.0e-3}},
-    "plastic": {"drawn_tubing": {"ft": 5.0e-6, "m": 1.50e-3}},
-    "glass": {"ft": 0, "m": 0},
-    "concrete": {
-        "smoothed": {"ft": 1.30e-4, "m": 4.0e-2},
-        "rough": {"ft": 7.00e-3, "m": 2.0},
+    'brass': {
+        'drawn_new': {
+            'ft': 7.0E-6,
+            'm': 2.0E-3
+        }
     },
-    "rubber": {"smoothed": {"ft": 3.30e-5, "m": 1.0e-2}},
-    "wood": {"stave": {"ft": 1.60e-3, "m": 5.0e-1}},
+    'plastic': {
+        'drawn_tubing': {
+            'ft': 5.0E-6,
+            'm': 1.50E-3
+        }
+    },
+    'glass': {
+        'ft': 0,
+        'm': 0
+    },
+    'concrete': {
+        'smoothed': {
+            'ft': 1.30E-4,
+            'm': 4.0E-2
+        },
+        'rough': {
+            'ft': 7.00E-3,
+            'm': 2.0
+        }
+    },
+    'rubber': {
+        'smoothed': {
+            'ft': 3.30E-5,
+            'm': 1.0E-2
+        }
+    },
+    'wood': {
+        'stave': {
+            'ft': 1.60E-3,
+            'm': 5.0E-1
+        }
+    }
 }
 
 
@@ -46,25 +126,22 @@ class HeadLossModel(db.Model):
     user = db.relationship("UserModel")
 
     def __init__(
-        self,
-        fluid_density,
-        kinematic_viscosity,
-        pipe_diameter,
-        pipe_material,
-        material_condition,
-        volumetric_flow_rate,
-        pipe_length,
-        user_id,
+            self,
+            fluid_density,
+            kinematic_viscosity,
+            pipe_diameter,
+            pipe_material,
+            material_condition,
+            volumetric_flow_rate,
+            pipe_length,
+            user_id,
     ):
         self.fluid_density = fluid_density
         self.kinematic_viscosity = kinematic_viscosity
         self.pipe_diameter = pipe_diameter
         self.volumetric_flow_rate = volumetric_flow_rate
-        self.average_roughness = (
-            average_roughness[pipe_material][material_condition]["m"]
-            if pipe_material != "glass"
-            else average_roughness[pipe_material]["m"]
-        )
+        self.average_roughness = average_roughness[pipe_material][material_condition][
+            'm'] if pipe_material != 'glass' else average_roughness[pipe_material]['m']
         self.pipe_length = pipe_length
         self.user_id = user_id
 
@@ -78,7 +155,7 @@ class HeadLossModel(db.Model):
 
     @classmethod
     def calculate_reynolds_number(
-        cls, pipe_diameter, kinematic_viscosity, fluid_velocity
+            cls, pipe_diameter, kinematic_viscosity, fluid_velocity
     ):
         return (pipe_diameter * fluid_velocity) / kinematic_viscosity
 
@@ -97,34 +174,24 @@ class HeadLossModel(db.Model):
 
     @classmethod
     def calculate_friction_factor(cls, relative_roughness, reynolds_number):
-        aux = -4 * log10(
-            (relative_roughness / 3.7)
-            - (5.02 / reynolds_number)
-            * log10((relative_roughness / 3.7) + (13 / reynolds_number))
-        )
+        aux = -4 * log10((relative_roughness / 3.7) - (5.02 / reynolds_number) * log10(
+            (relative_roughness / 3.7) + (13 / reynolds_number)))
         return 1 / (aux ** 2)
 
     @classmethod
-    def calculate_head_loss(
-        cls, friction_factor, pipe_length, pipe_diameter, fluid_velocity
-    ):
-        return (
-            2
-            * friction_factor
-            * (pipe_length / pipe_diameter)
-            * ((fluid_velocity ** 2) / GRAVITY)
-        )
+    def calculate_head_loss(cls, friction_factor, pipe_length, pipe_diameter, fluid_velocity):
+        return 2 * friction_factor * (pipe_length / pipe_diameter) * ((fluid_velocity ** 2) / GRAVITY)
 
     @classmethod
     def json(
-        cls,
-        cross_sectional_area,
-        fluid_velocity,
-        reynolds_number,
-        reynolds_number_regime,
-        relative_roughness,
-        friction_factor,
-        head_loss,
+            cls,
+            cross_sectional_area,
+            fluid_velocity,
+            reynolds_number,
+            reynolds_number_regime,
+            relative_roughness,
+            friction_factor,
+            head_loss,
     ):
         """
         Recebe os parametros e retorna o mesmo em formato JSON.
@@ -182,3 +249,11 @@ class HeadLossModel(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+
+api.add_resource(GetHeadLoss, "/headloss/<int:analysis_id>")
+
+if __name__ == "__main__":
+    from db import db
+
+    db.init_app(app)
+    app.run(port=5123, debug=True)

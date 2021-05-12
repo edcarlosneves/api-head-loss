@@ -7,4 +7,3 @@ class UserSchema(ma.SQLAlchemySchema):
         model = UserModel
         load_only = ("password",)
         dump_only = ("id",)
-
