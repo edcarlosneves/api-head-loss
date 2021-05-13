@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from rest_framework.utils import field_mapping
 
-from analysis.models import Analysis
+from analysis.models import Analysis, PipeMaterial
 
 
 class AnalysisSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Analysis
-        fields = ["analysis_name"]
+        fields = ["analysis_name", "density"]
+
+
+class PipeMaterialSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PipeMaterial
+        fields = "__all__"
