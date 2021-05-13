@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from analysis.models import Analysis
+from rest_framework import serializers, viewsets
+from analysis.serializers import AnalysisSerializer
 
-# Create your views here.
+
+class AnalysisViewSet(viewsets.ModelViewSet):
+    queryset = Analysis.objects.all()
+    serializer_class = AnalysisSerializer

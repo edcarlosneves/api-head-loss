@@ -1,3 +1,8 @@
 from django.db import models
 
-# Create your models here.
+
+class Analysis(models.Model):
+    analysis_name = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = "Analyses"
