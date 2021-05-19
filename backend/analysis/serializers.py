@@ -6,7 +6,7 @@ from analysis.models import Analysis, PipeMaterial
 class AnalysisSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Analysis
-        fields = ["analysis_name", "density"]
+        fields = "__all__"
 
 
 class PipeMaterialSerializer(serializers.HyperlinkedModelSerializer):
