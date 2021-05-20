@@ -45,6 +45,10 @@ class App extends React.Component {
               <th>Kinematic Viscosity</th>
               <th>Pipe Diameter</th>
               <th>Volumetric Flow Rate</th>
+              <th>Pipe Material</th>
+              <th>Material Condition</th>
+              <th>Pipe Length</th>
+              <th>Head Loss</th>
             </tr>
           </thead>
           <tbody>
@@ -54,9 +58,13 @@ class App extends React.Component {
                   <td>{index + 1}</td>
                   <td>{analysis.analysis_name}</td>
                   <td>{analysis.density}</td>
-                  <td>{analysis.kinematic_viscosity}</td>
+                  <td>{analysis.kinematic_viscosity.toExponential(3)}</td>
                   <td>{analysis.pipe_diameter}</td>
                   <td>{analysis.volumetric_flow_rate}</td>
+                  <td>{analysis.pipe_material}</td>
+                  <td>{analysis.material_condition}</td>
+                  <td>{analysis.pipe_length}</td>
+                  <td>{analysis.head_loss.toExponential(2)}</td>
                 </tr>
               );
             })}
