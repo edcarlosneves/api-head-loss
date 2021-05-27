@@ -1,5 +1,7 @@
 from django.contrib import admin
-from analysis.models import Analysis, PipeMaterial
+from analysis.models import Analysis
 
-admin.site.register(Analysis)
-admin.site.register(PipeMaterial)
+
+@admin.register(Analysis)
+class AnalysisAdmin(admin.ModelAdmin):
+    readonly_fields = ("head_loss",)
