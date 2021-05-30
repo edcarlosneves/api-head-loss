@@ -1,5 +1,14 @@
 version: '3.7'
+
 services:
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: headloss@10
+      POSTGRES_USER: headloss
+      POSTGRES_DB: headloss
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
   frontend:
     build:
       context: ./frontend
@@ -12,15 +21,19 @@ services:
   backend:
     build:
       context: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
     container_name: api-head-loss-backend
     ports:
       - 8000:8000
     volumes:
       - ./backend:/usr/src/app
-    # depends_on:
-    #   - frontend
+    depends_on:
+      - db
   mailhog: # service for faking a SMTP server
     image: mailhog/mailhog
     ports:
       - '1025:1025' # smtp server
       - '8025:8025' # web ui
+
+volumes:
+  postgres_data:

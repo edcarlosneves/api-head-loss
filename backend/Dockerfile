@@ -8,4 +8,6 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-CMD python manage.py runserver 0.0.0.0:8000
+# CMD python manage.py runserver 0.0.0.0:8000
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
