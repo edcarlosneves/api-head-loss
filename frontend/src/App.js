@@ -60,7 +60,7 @@ class App extends React.Component {
 
     var csrftoken = this.getCookie('csrftoken');
 
-    fetch('http://backend:8000/api-token-auth/', {
+    fetch('http://localhost:8000/api-token-auth/', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -77,7 +77,7 @@ class App extends React.Component {
     var user_token = localStorage.getItem('user_token');
 
     console.log('token: ' + user_token);
-    fetch('http://backend:8000/api/analysis/', {
+    fetch('http://localhost:8000/api/analysis/', {
       headers: {
         Authorization: 'Token ' + user_token,
       },
@@ -95,7 +95,7 @@ class App extends React.Component {
 
     var user_token = localStorage.getItem('user_token');
 
-    fetch(`http://backend:8000/api/analysis/${analysis.id}/`, {
+    fetch(`http://localhost:8000/api/analysis/${analysis.id}/`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json',
@@ -135,14 +135,14 @@ class App extends React.Component {
 
     var csrftoken = this.getCookie('csrftoken');
 
-    var url = 'http://backend:8000/api/analysis/';
+    var url = 'http://localhost:8000/api/analysis/';
 
     var user_token = localStorage.getItem('user_token');
 
     var method = 'POST';
 
     if (this.state.editing === true) {
-      url = `http://backend:8000/api/analysis/${this.state.activeItem.id}/`;
+      url = `http://localhost:8000/api/analysis/${this.state.activeItem.id}/`;
       method = 'PUT';
       this.setState({
         editing: false,
@@ -194,7 +194,11 @@ class App extends React.Component {
     var self = this;
     var user_token = localStorage.getItem('user_token');
     console.log('user_token: ' + user_token);
-    if (user_token === '' || user_token === null) {
+    if (
+      user_token === '' ||
+      user_token === 'undefined' ||
+      user_token === null
+    ) {
       return (
         <Container>
           <form onSubmit={this.getToken} id='form'>

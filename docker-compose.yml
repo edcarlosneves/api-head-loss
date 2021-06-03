@@ -12,17 +12,17 @@ services:
   frontend:
     build:
       context: ./frontend
-    container_name: api-head-loss-frontend
     volumes:
       - ./frontend:/app/
       - /app/node_modules
     ports:
       - '3000:3000'
+    depends_on:
+      - backend
   backend:
     build:
       context: ./backend
     command: python manage.py runserver 0.0.0.0:8000
-    container_name: api-head-loss-backend
     ports:
       - 8000:8000
     volumes:

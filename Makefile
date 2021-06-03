@@ -19,11 +19,19 @@ docker_test:
 
 docker_create_admin_user:
 	docker-compose exec backend python manage.py createsuperuser
-	# docker exec -it container_id python manage.py createsuperuser
+
+docker_makemigrations:
+	docker-compose exec backend python manage.py makemigrations
+
+docker_migrate:
+	docker-compose exec backend python manage.py migrate
 
 build_front:
 	cd frontend/ && npm run build
+	rm -r backend/web_interface/build
 	cp -r frontend/build/ backend/web_interface/
 
 test:
 	python3 backend/manage.py test backend/ $(ARG) --parallel --keepdb
+
+
