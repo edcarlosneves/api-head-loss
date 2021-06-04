@@ -23,6 +23,9 @@ docker_create_admin_user:
 docker_makemigrations:
 	docker-compose exec backend python manage.py makemigrations
 
+docker_logs:
+	docker-compose logs -f $(ARG)
+
 docker_migrate:
 	docker-compose exec backend python manage.py migrate
 

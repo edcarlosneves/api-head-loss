@@ -28,21 +28,15 @@ class Analysis(models.Model):
     pipe_material = models.CharField("pipe material", max_length=255)
     material_condition = models.CharField("material condition", max_length=255)
     pipe_length = models.FloatField("pipe length", validators=[validate_positive_float])
-    head_loss = models.FloatField("head loss", null=True, blank=True)
-    reynolds_number = models.FloatField("reynolds number", null=True, blank=True)
-    reynolds_number_regime = models.CharField(
-        "reynolds number regime", null=True, blank=True, max_length=15
-    )
-
     owner = models.ForeignKey(
-        "accounts.User", related_name="analyses", on_delete=models.CASCADE
+        "accounts.UserProfile", related_name="analyses", on_delete=models.CASCADE
     )
 
     objects = models.Manager()
     turbulent_regime_objects = TurbulentRegimeManager()
 
     def __str__(self):
-        return f"{self.analysis_name} - [{self.pk}]"
+        return f"{self.analysis_name} - {self.owner}"
 
     class Meta:
         verbose_name_plural = "Analyses"
