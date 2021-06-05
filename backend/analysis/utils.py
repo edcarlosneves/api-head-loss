@@ -1,7 +1,7 @@
 from math import pi, log10
 from scipy import constants
 
-AVERAGE_ROUGHNESS = {
+AVERAGE_ROUGHNESS_DATA = {
     "steel": {
         "sheet_metal_new": {"ft": 1.6e-4, "m": 5.0e-2},
         "stainless_new": {"ft": 7.0e-6, "m": 2.0e-3},
@@ -51,7 +51,7 @@ def calculate_reynolds_number(pipe_diameter, kinematic_viscosity, volumetric_flo
 
 
 def calculate_average_roughness(pipe_material, material_condition):
-    return AVERAGE_ROUGHNESS[pipe_material][material_condition]["m"]
+    return AVERAGE_ROUGHNESS_DATA[pipe_material][material_condition]["m"]
 
 
 def calculate_relative_roughness(pipe_diameter, pipe_material, material_condition):

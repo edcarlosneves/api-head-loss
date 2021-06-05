@@ -9,14 +9,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('analysis', '0001_initial'),
+        ("analysis", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='analysis',
-            name='owner',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='analyses', to='accounts.userprofile'),
+            model_name="analysis",
+            name="owner",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="analyses",
+                to="accounts.userprofile",
+            ),
             preserve_default=False,
         ),
     ]

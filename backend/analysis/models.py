@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from math import pi, log10
 from scipy import constants
 
-from analysis.managers import TurbulentRegimeManager
+from .managers import TurbulentRegimeManager
 
 
 class Analysis(models.Model):
