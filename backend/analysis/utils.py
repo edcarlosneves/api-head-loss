@@ -1,31 +1,6 @@
 from math import pi, log10
 from scipy import constants
 
-# AVERAGE_ROUGHNESS_DATA = {
-#     "steel": {
-#         "sheet_metal_new": {"ft": 1.6e-4, "m": 5.0e-2},
-#         "stainless_new": {"ft": 7.0e-6, "m": 2.0e-3},
-#         "commercial_new": {"ft": 1.50e-4, "m": 4.60e-2},
-#         "riveted": {"ft": 1.0e-2, "m": 3.0},
-#         "rusted": {"ft": 7.0e-3, "m": 2.0},
-#     },
-#     "iron": {
-#         "cast_new": {"ft": 8.50e-4, "m": 2.60e-1},
-#         "wrought_new": {"ft": 1.50e-4, "m": 4.60e-2},
-#         "galvanized_new": {"ft": 5.0e-4, "m": 1.50e-1},
-#         "asphalted_cast": {"ft": 4.00e-4, "m": 1.20e-1},
-#     },
-#     "brass": {"drawn_new": {"ft": 7.0e-6, "m": 2.0e-3}},
-#     "plastic": {"drawn_tubing": {"ft": 5.0e-6, "m": 1.50e-3}},
-#     "glass": {"not_applicable": {"ft": 0, "m": 0}},
-#     "concrete": {
-#         "smoothed": {"ft": 1.30e-4, "m": 4.0e-2},
-#         "rough": {"ft": 7.00e-3, "m": 2.0},
-#     },
-#     "rubber": {"smoothed": {"ft": 3.30e-5, "m": 1.0e-2}},
-#     "wood": {"stave": {"ft": 1.60e-3, "m": 5.0e-1}},
-# }
-
 
 def get_reynolds_number_regime(reynolds_number):
     if reynolds_number < 2300:
