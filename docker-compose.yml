@@ -7,26 +7,20 @@ services:
       POSTGRES_PASSWORD: headloss@10
       POSTGRES_USER: headloss
       POSTGRES_DB: headloss
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-  frontend:
-    build:
-      context: ./frontend
-    volumes:
-      - ./frontend:/app/
-      - /app/node_modules
     ports:
-      - '3000:3000'
-    depends_on:
-      - backend
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data/
   backend:
     build:
-      context: ./backend
+      context: ./reynolds-number-calculator
+    environment:
+      SQL_HOST: db
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     volumes:
-      - ./backend:/usr/src/app
+      - ./reynolds-number-calculator:/usr/src/app
     depends_on:
       - db
   mailhog: # service for faking a SMTP server
@@ -36,4 +30,4 @@ services:
       - '8025:8025' # web ui
 
 volumes:
-  postgres_data:
+  db_data:

@@ -29,12 +29,7 @@ docker_logs:
 docker_migrate:
 	docker-compose exec backend python manage.py migrate
 
-build_front:
-	cd frontend/ && npm run build
-	rm -r backend/web_interface/build
-	cp -r frontend/build/ backend/web_interface/
-
 test:
-	python3 backend/manage.py test backend/ $(ARG) --parallel --keepdb
+	python3 reynolds-number-calculator/manage.py test reynolds-number-calculator/ $(ARG) --parallel --keepdb
 
 
